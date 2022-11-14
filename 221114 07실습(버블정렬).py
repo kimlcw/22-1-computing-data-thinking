@@ -9,7 +9,7 @@ def A_ham(input_num, my_num):
                 my_num[j], my_num[j+1] = my_num[j+1], my_num[j]
         print("%d회전 : %s"%(input_num-i, my_num))
 
-def B_ham(input_num, my_num):
+def D_ham(input_num, my_num):
     for i in range(input_num-1, 0, -1):
         for j in range(0, i, 1):
             if(my_num[j]<my_num[j+1]):
@@ -33,7 +33,7 @@ my_type = input("정렬방식을 입력하세요. A(오름차순) 또는 D(내�
 if(my_type == 'A' or my_type == 'a'):
     A_ham(input_num, my_num)
 elif(my_type == 'D' or my_type == 'd'):
-    B_ham(input_num, my_num)
+    D_ham(input_num, my_num)
 else:
     print("정렬방법을 다시 선택하세요.")
 
