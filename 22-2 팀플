@@ -1,0 +1,214 @@
+import tkinter
+import tkinter.ttk
+from dataclasses import dataclass
+
+mylist = []
+win_ON = 1
+
+
+class MYINFO:
+    I_date:int = None
+    I_moeny:int = None
+    I_item:str = None
+    I_type:str = None
+
+temp = MYINFO()
+print("temp 세팅")
+#mylist.append(temp)
+
+
+
+
+window=tkinter.Tk() # 생성
+# 윈도우명이 'window'인 가장 상위 레벨의 윈도우 창 생성
+# 생성 ~ 반복 구문 사이에 위젯을 생성하고 적용
+
+window.title("가계부") # 윈도우 창의 제목
+window.geometry("700x700+600+100") # 너비*높이 + x좌표 + y좌표
+window.resizable(True, True)
+window.option_add("*Font", "돋움 15")
+
+#resizeable()을 적용할 때,
+# True=1, False=0을 의미하여 상수를 입력해도 적용이 가능합니다.
+
+
+label1=tkinter.Label(window, text="<<< 가계부 프로그램 >>>\n", width=30, height=5, fg="red", relief="solid")
+label2=tkinter.Label(window, text="본 프로그램은 지출만을 기록합니다. \n수요자가 많을 시 소득 기록 기능이 추가될 수 있습니다.\n")
+label3=tkinter.Label(window, text="날짜를 입력한 뒤")
+label4=tkinter.Label(window, text="[ Enter ] 키를 통해 추가")
+label5=tkinter.Label(window, text="(00/00/00 형식으로 입력할 것)\n")
+
+label1.pack() # 위젯을 배치할 수 있습니다.
+label2.pack()
+label3.pack()
+label4.pack()
+label5.pack()
+
+
+# 리스트박스[date_count] 에 date 추가 함수
+def fx_date(event):
+    global date_count
+    date_count = 0
+    my_date.insert(date_count, entry.get()) # 추가
+    temp.I_date = entry.get() # MYINFO형 변수 temp.I_date에 날짜값 넣기
+    
+    date_count = date_count + 1
+    my_date.pack()
+    
+    
+    # label.config(text="결과="+str(eval(entry.get()))) # 간단한 수학함수 작성 후 Enter
+
+# my_date 리스트박스
+my_date = tkinter.Listbox(window, selectmode='extended', height=0)
+# my_date.config(selectmode = "multiple")  # 여러 개 선택 가능
+# button = tkinter.Button(window, overrelief="solid", width=15, command=countUP, repeatdelay=1000, repeatinterval=100)
+
+
+# 입력창 entry
+entry=tkinter.Entry(window) #속성
+entry.bind("<Return>", fx_date) #입력하고 enter 누르면 fx_date 함수 실행
+entry.pack()
+
+
+def fx_contents():
+    text = my_date.curselection()[0]  # listbox.curselection()은 튜플 형태, 튜플의 첫번째 인자를 저장
+    # 0, 1, 2 ... 
+    
+    window2=tkinter.Tk() # 생성
+    window2.title(text) # 윈도우 창의 제목
+    window2.geometry("700x700+900+100") # 너비*높이 + x좌표 + y좌표
+    window2.resizable(True, True)
+    window2.option_add("*Font", "돋움 15")
+
+    label4=tkinter.Label(window2, text="지출 항목을 선택하세요.")
+    label4.pack() # 위젯을 배치할 수 있습니다.
+
+
+    # Combobox 생성 및 출력
+    type_list = ["식품비", "저축", "통신비", "교통비", "문화생활비", "의류미용비", "교육비", "의료건강비", "기타"]
+    cb = tkinter.ttk.Combobox(window2)
+    cb.config(values = type_list)
+    cb.pack()
+
+    
+    # [항목 선택] 버튼 정의
+    btn = tkinter.Button(window2)
+    btn.config(text = "항목 선택")
+    
+
+    # [항목]값 불러와서 출력
+    def click():
+        temp.I_type = cb.get() # 선택한 콤보박스 항목값 temp.I_type에 넣기
+        print("temp.I_type =", temp.I_type)
+
+        lab = tkinter.Label(window2)
+        lab.config(text = temp.I_type)
+        lab.pack()
+
+        cl_label=tkinter.Label(window2, text="지출 내용을 입력해주세요.\n", width=30, height=5, fg="red", relief="solid")
+        cl_label.pack()
+
+
+        # [지출 내용 입력] 버튼 정의
+        btn2 = tkinter.Button(window2)
+        btn2.config(text = "지출 내용 입력")
+        
+        
+        # 지출 내용 입력받는 entry 생성 (1)
+        cl_entry=tkinter.Entry(window2)
+        cl_entry.pack()
+
+        def fx_what():
+            temp.I_item = cl_entry.get() # 입력한 지출 내용 temp.I.item에 넣기
+            print("temp.I_item =", temp.I_item)
+            
+            la = tkinter.Label(window2, text=temp.I_item) # 지출 내용 출력
+            la.pack()
+
+            # 지출 금액 입력받기
+            cl2_entry=tkinter.Entry(window2)
+            cl2_entry.pack()
+            
+            # [지출 금액 입력] 버튼 정의
+            btn3 = tkinter.Button(window2)
+            btn3.config(text = "지출 금액 입력")
+            
+
+            def fx_money():
+                temp.I_money = cl2_entry.get() # 입력한 지출 금액 temp.I_money에 넣기
+                print("temp.I_money =", temp.I_money)
+
+                # [확인][취소] 버튼 정의
+                Y_btn = tkinter.Button(window2)
+                Y_btn.config(text = "확인")
+
+                N_btn = tkinter.Button(window2)
+                N_btn.config(text = "취소")
+                
+
+                def fx_Y():
+                    mylist.append(temp)
+                    print("mylist =", mylist)
+                def fx_N():
+                    win_ON = 0
+
+                # 버튼 출력 
+                Y_btn.config(command = fx_Y)
+                Y_btn.pack()
+                N_btn.config(command = fx_N)
+                N_btn.pack()
+
+
+            # [지출 금액 입력] 버튼 출력, 버튼 클릭 시 fx_money 함수 실행
+            btn3.config(command = fx_money)
+            btn3.pack()
+
+
+            # [지출 내용 입력] 버튼 출력, 버튼 클릭 시 fx_what 함수 실행
+        btn2.config(command = fx_what)
+        btn2.pack()
+
+
+# 이거 클릭하면     
+        
+
+    # [항목 선택] 버튼 활성화. 버튼 클릭 시 click 함수 실행
+    btn.config(command = click)
+    btn.pack()
+
+    if win_ON == 1:
+        window2.mainloop()
+
+
+# 버튼 누르면 fx_date 실행
+button = tkinter.Button(window)
+button.config(overrelief="solid", command=fx_contents)
+button.config(repeatdelay=1000, repeatinterval=100)
+button.config(width=20, height=1, bg='OliveDrab1')
+button.config(text = "해당 일자 기록하기")
+button.pack(side = "top", padx=1) # 위젯 배치
+
+
+def fx_delete():
+    text = my_date.curselection()[0]  # listbox.curselection()은 튜플 형태, 튜플의 첫번째 인자를 저장
+    my_date.delete(text)
+    # 0, 1, 2 ... 
+
+del_button = tkinter.Button(window)
+del_button.config(overrelief="solid", command=fx_delete)
+del_button.config(repeatdelay=1000, repeatinterval=100)
+del_button.config(width=20, height=1, bg ='tomato2')
+del_button.config(text = "해당 일자 삭제하기")
+del_button.pack(side = "top", padx=2) # 위젯 배치
+
+############################### listbox ##################################
+# listbox.delete(1, 2) # 시작 인덱스, 끝 인덱스 => 삭제
+# listbox.delete(0) # 단일 항목 삭제
+
+
+
+window.mainloop() # 반복
+# window의 윈도우 창을 윈도우가 종료될 때까지 실행
+#########################################################################
+
+
